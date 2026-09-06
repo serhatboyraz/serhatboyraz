@@ -39,102 +39,6 @@ FONT = "Segoe UI, Helvetica, Arial, sans-serif"
 W = 888
 
 
-def card(
-    x: float,
-    y: float,
-    w: float,
-    h: float,
-    t: dict,
-    overline: str,
-    title: str,
-    chips: list[str],
-    body_lines: list[str],
-) -> str:
-    shadow = (
-        f'<rect x="{x + 3}" y="{y + 7}" width="{w}" height="{h}" rx="16" fill="{t["shadow"]}"/>'
-    )
-    surface = (
-        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="16" '
-        f'fill="{t["card"]}" stroke="{t["outline"]}" stroke-width="1"/>'
-    )
-    accent = f'<rect x="{x}" y="{y}" width="6" height="{h}" rx="3" fill="{t["primary"]}"/>'
-    texts = [
-        f'<text x="{x + 28}" y="{y + 36}" fill="{t["overline"]}" font-family="{FONT}" '
-        f'font-size="11" font-weight="600" letter-spacing="1.8">{overline}</text>',
-        f'<text x="{x + 28}" y="{y + 68}" fill="{t["on_card"]}" font-family="{FONT}" '
-        f'font-size="22" font-weight="700">{title}</text>',
-    ]
-    for i, line in enumerate(body_lines):
-        texts.append(
-            f'<text x="{x + 28}" y="{y + 100 + i * 20}" fill="{t["on_variant"]}" '
-            f'font-family="{FONT}" font-size="13">{line}</text>'
-        )
-    chip_y = y + h - 48
-    chip_x = x + 28
-    chip_svgs: list[str] = []
-    for label in chips:
-        cw = 12 + len(label) * 7.2
-        chip_svgs.append(
-            f'<rect x="{chip_x}" y="{chip_y}" width="{cw:.1f}" height="28" rx="14" fill="{t["chip"]}"/>'
-            f'<text x="{chip_x + cw / 2:.1f}" y="{chip_y + 18}" text-anchor="middle" '
-            f'fill="{t["chip_text"]}" font-family="{FONT}" font-size="11" font-weight="600">{label}</text>'
-        )
-        chip_x += cw + 8
-    return shadow + surface + accent + "".join(texts) + "".join(chip_svgs)
-
-
-PROJECTS = [
-    {
-        "slug": "agent",
-        "overline": "FEATURED PROJECT",
-        "title": "AI Development Agent",
-        "chips": ["GitLab", "Jira", "Tests", "Code Review"],
-        "body": [
-            "AI-powered software development workflow that",
-            "takes work from the backlog to a reviewed merge",
-            "request.",
-            "",
-            "GitLab   →   Jira   →   Agent   →   Dev   →   MR",
-        ],
-    },
-    {
-        "slug": "esign",
-        "overline": "FEATURED PROJECT",
-        "title": "E-Signature Platform",
-        "chips": [".NET", "HSM", "Esya", "e-Invoice"],
-        "body": [
-            "Enterprise electronic signature platform built",
-            "with .NET. Integrates TÜBİTAK Esya with smart",
-            "cards and HSM devices for legally compliant",
-            "signing in e-invoice and e-dispatch flows.",
-        ],
-    },
-]
-
-
-def project_card_svg(t: dict, project: dict) -> str:
-    h = 268
-    cw = (W - 20) / 2
-    svg_h = h + 16
-    content = card(
-        0,
-        2,
-        cw,
-        h,
-        t,
-        project["overline"],
-        project["title"],
-        project["chips"],
-        project["body"],
-    )
-    return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{cw}" height="{svg_h}" '
-        f'viewBox="0 0 {cw} {svg_h}">'
-        f'<rect width="{cw}" height="{svg_h}" fill="{t["page"]}"/>'
-        f"{content}</svg>"
-    )
-
-
 def chips_svg(t: dict) -> str:
     groups = [
         ("BACKEND", ["C#", ".NET", "Java"]),
@@ -196,9 +100,6 @@ def write_svg_png(name: str, svg: str) -> None:
 
 def main() -> None:
     ASSETS.mkdir(parents=True, exist_ok=True)
-    for project in PROJECTS:
-        write_svg_png(f"project-{project['slug']}-dark", project_card_svg(DARK, project))
-        write_svg_png(f"project-{project['slug']}-light", project_card_svg(LIGHT, project))
     write_svg_png("tech-dark", chips_svg(DARK))
     write_svg_png("tech-light", chips_svg(LIGHT))
     write_svg_png("bar-dark", bar_svg(DARK))
