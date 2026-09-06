@@ -83,48 +83,55 @@ def card(
     return shadow + surface + accent + "".join(texts) + "".join(chip_svgs)
 
 
-def projects_svg(t: dict) -> str:
-    h = 268
-    gap = 20
-    cw = (W - gap) / 2
-    agent = card(
-        0,
-        2,
-        cw,
-        h,
-        t,
-        "FEATURED PROJECT",
-        "AI Development Agent",
-        ["GitLab", "Jira", "Tests", "Code Review"],
-        [
+PROJECTS = [
+    {
+        "slug": "agent",
+        "overline": "FEATURED PROJECT",
+        "title": "AI Development Agent",
+        "chips": ["GitLab", "Jira", "Tests", "Code Review"],
+        "body": [
             "AI-powered software development workflow that",
             "takes work from the backlog to a reviewed merge",
             "request.",
             "",
             "GitLab   →   Jira   →   Agent   →   Dev   →   MR",
         ],
-    )
-    esign = card(
-        cw + gap,
-        2,
-        cw,
-        h,
-        t,
-        "FEATURED PROJECT",
-        "E-Signature Platform",
-        [".NET", "HSM", "Esya", "e-Invoice"],
-        [
+    },
+    {
+        "slug": "esign",
+        "overline": "FEATURED PROJECT",
+        "title": "E-Signature Platform",
+        "chips": [".NET", "HSM", "Esya", "e-Invoice"],
+        "body": [
             "Enterprise electronic signature platform built",
             "with .NET. Integrates TÜBİTAK Esya with smart",
             "cards and HSM devices for legally compliant",
             "signing in e-invoice and e-dispatch flows.",
         ],
+    },
+]
+
+
+def project_card_svg(t: dict, project: dict) -> str:
+    h = 268
+    cw = (W - 20) / 2
+    svg_h = h + 16
+    content = card(
+        0,
+        2,
+        cw,
+        h,
+        t,
+        project["overline"],
+        project["title"],
+        project["chips"],
+        project["body"],
     )
     return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{h + 16}" '
-        f'viewBox="0 0 {W} {h + 16}">'
-        f'<rect width="{W}" height="{h + 16}" fill="{t["page"]}"/>'
-        f"{agent}{esign}</svg>"
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{cw}" height="{svg_h}" '
+        f'viewBox="0 0 {cw} {svg_h}">'
+        f'<rect width="{cw}" height="{svg_h}" fill="{t["page"]}"/>'
+        f"{content}</svg>"
     )
 
 
@@ -189,8 +196,9 @@ def write_svg_png(name: str, svg: str) -> None:
 
 def main() -> None:
     ASSETS.mkdir(parents=True, exist_ok=True)
-    write_svg_png("projects-dark", projects_svg(DARK))
-    write_svg_png("projects-light", projects_svg(LIGHT))
+    for project in PROJECTS:
+        write_svg_png(f"project-{project['slug']}-dark", project_card_svg(DARK, project))
+        write_svg_png(f"project-{project['slug']}-light", project_card_svg(LIGHT, project))
     write_svg_png("tech-dark", chips_svg(DARK))
     write_svg_png("tech-light", chips_svg(LIGHT))
     write_svg_png("bar-dark", bar_svg(DARK))

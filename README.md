@@ -12,8 +12,14 @@ I design and build scalable, distributed, and cloud-native systems. Currently co
 
 ## Featured work
 
-<img src="./assets/projects-dark.png#gh-dark-mode-only" alt="AI Development Agent and E-Signature Platform" width="888" />
-<img src="./assets/projects-light.png#gh-light-mode-only" alt="AI Development Agent and E-Signature Platform" width="888" />
+<a href="https://github.com/serhatboyraz/ai-softwaredevelopment-team">
+  <img src="./assets/project-agent-dark.png#gh-dark-mode-only" alt="AI Development Agent" width="434" />
+  <img src="./assets/project-agent-light.png#gh-light-mode-only" alt="AI Development Agent" width="434" />
+</a>
+<a href="https://github.com/serhatboyraz/opensignature">
+  <img src="./assets/project-esign-dark.png#gh-dark-mode-only" alt="E-Signature Platform" width="434" />
+  <img src="./assets/project-esign-light.png#gh-light-mode-only" alt="E-Signature Platform" width="434" />
+</a>
 
 ## Tech stack
 
